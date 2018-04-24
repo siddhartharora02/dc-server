@@ -1,6 +1,6 @@
 const express = require ('express');
 const bodyParser = require('body-parser');
-
+const cors = require('cors');
 //create an express app
 const app = express();
 
@@ -8,6 +8,9 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended:true }));
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.json());
+
+// Cors to allow different website data flow
+app.use(cors());
 
 // configuring the database
 const dbConfig = require('./config/database.config');
