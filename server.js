@@ -1,6 +1,8 @@
 const express = require ('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+var session = require('express-session');
+
 //create an express app
 const app = express();
 
@@ -11,6 +13,14 @@ app.use(bodyParser.json());
 
 // Cors to allow different website data flow
 app.use(cors());
+
+// Using sessions on the website
+app.use(session({
+    secret:'work harder',
+    resave: true,
+    saveUninitialized: false
+}));
+
 
 // configuring the database
 const dbConfig = require('./config/database.config');
@@ -35,6 +45,7 @@ app.get('/', (req,res)=>{
 });
 
 require('./app/routes/contacts.routes.js')(app);
+require('./app/routes/users.routes.js')(app);
 
 const port = process.env.PORT || 3000;
 console.log(process.env.NODE_ENV);
