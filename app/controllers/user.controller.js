@@ -1,5 +1,6 @@
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 // create and Save a post
 exports.create = (req,res) => {
 
@@ -28,65 +29,24 @@ exports.create = (req,res) => {
                 });
             }
         })
-    } else if (req.body.loginEmail && req.body.loginPassword){
-        // validate if all fields are there
-        User.find({
-            email: req.body.loginEmail
-        }).then(data=>{
-            if(data.length < 1){
-                return res.status(400).send({
-                    message: "Email Id Incorrect"
-                })
-            }
-            bcrypt.compare(req.body.loginPassword, data[0].password, (err,result)=>{
-                if(err){
-                    console.log(err);
-                    return res.status(401).send({
-                        message: "Authentication Failed"
-                    })
-                }
-                if(result){
-                    console.log(result);
-                    return res.status(200).send({
-                        message: 'Authentication Successful'
-                    })
-                }
-                if(!result){
-                    console.log(result);
-                    return res.status(200).send({
-                        message: 'Password Wrong'
-                    })
-                }
-            })
-        }).catch(err => {
-            console.log(err);
-            return res.status(500).send({
-                message: err.message
-            })
-        });
-
     } else if(!req.body.email || !req.body.username || !req.body.password || !req.body.passwordConf){
         return res.status(400).send({
             message: "Form cannot be left blank!"
         })
     }
-
-
-
-
-
-
-
-    // create a contact
-
-
-    // saving contact instance to database
-
 };
 
 // Retrieve and return all notes from the database.
 exports.findAll = (req, res) => {
-
+    User.find({
+        email: req.userdata.email
+    }).then( users =>{
+        res.status(200).send(users);
+    }).catch(err=>{
+        res.status(500).send({
+            message: err.message
+        })
+    });
 };
 
 // Find a single note with a noteId
@@ -99,4 +59,58 @@ exports.update = (req,res) => {
 
 // Delete a note with the specified noteId in the request
 exports.delete = (req, res) => {
+};
+
+// User Login Controllers
+
+exports.login = (req,res) =>{
+    if (req.body.loginEmail && req.body.loginPassword){
+        // validate if all fields are there
+        User.find({
+            email: req.body.loginEmail
+        }).exec().then(data => {
+            if(data.length < 1){
+                return res.status(400).send({
+                    message: "Email Id Incorrect"
+                })
+            }
+            bcrypt.compare(req.body.loginPassword, data[0].password, (err,result) => {
+                if(err){
+                    console.log(err);
+                    return res.status(401).send({
+                        message: "Authentication Failed"
+                    })
+                }
+                if(result){
+                    const token = jwt.sign({
+                        email: data[0].email,
+                        username: data[0].username
+                    },'token-checker',{
+                        expiresIn: 200000
+                    });
+                    return res.status(200).send({
+                        message: 'Authentication Successful',
+                        Authorization : token,
+                        verified: true,
+                        user: data[0].username
+                    })
+                }
+                if(!result){
+                    console.log(result);
+                    return res.status(200).send({
+                        message: 'Password Wrong'
+                    })
+                }
+            })
+        }).catch( err => {
+            console.log(err);
+            return res.status(500).send({
+                message: err.message
+            })
+        });
+    } else if(!req.body.loginEmail || !req.body.loginPassword){
+        return res.status(400).send({
+            message: "Form cannot be left blank!"
+        })
+    }
 };
