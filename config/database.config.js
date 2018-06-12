@@ -1,3 +1,3 @@
 module.exports = {
-    url : 'mongodb://localhost:27017/pro5-server',
+    url : 'mongodb://siddhartharora:chacha!@10@ds255970.mlab.com:55970/pro5db',
 };
