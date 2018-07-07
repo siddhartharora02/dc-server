@@ -1,35 +1,29 @@
 const User = require('../models/user.model');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+
 // create and Save a post
 exports.create = (req,res) => {
 
     // Check if all fields are filled
-    if(req.body.email && req.body.username && req.body.password){
+    if(req.body.name && req.body.email && req.body.phone && req.body.pan && req.body.company){
         const user = new User({
+            name: req.body.name,
             email: req.body.email,
-            username: req.body.username,
-            password: req.body.password
+            phone: req.body.phone,
+            pan: req.body.pan,
+            company: req.body.company,
         });
 
         user.save().then(data => {
             res.status(201).send(data);
         }).catch(err => {
-            if(err.errors.username){
-                return res.status(500).send({
-                    message: err.errors.username.message
-                });
-            }else if(err.errors.email){
+            console.log(err.errors.email.message);
+            if(err.errors.email){
                 return res.status(500).send({
                     message: err.errors.email.message
                 });
-            }else{
-                return res.status(500).send({
-                    message: err.message || "Some error occurred while registering user"
-                });
             }
         })
-    } else if(!req.body.email || !req.body.username || !req.body.password || !req.body.passwordConf){
+    } else if(!req.body.email || !req.body.name){
         return res.status(400).send({
             message: "Form cannot be left blank!"
         })
@@ -59,58 +53,4 @@ exports.update = (req,res) => {
 
 // Delete a note with the specified noteId in the request
 exports.delete = (req, res) => {
-};
-
-// User Login Controllers
-
-exports.login = (req,res) =>{
-    if (req.body.loginEmail && req.body.loginPassword){
-        // validate if all fields are there
-        User.find({
-            email: req.body.loginEmail
-        }).exec().then(data => {
-            if(data.length < 1){
-                return res.status(400).send({
-                    message: "Email Id Incorrect"
-                })
-            }
-            bcrypt.compare(req.body.loginPassword, data[0].password, (err,result) => {
-                if(err){
-                    console.log(err);
-                    return res.status(401).send({
-                        message: "Authentication Failed"
-                    })
-                }
-                if(result){
-                    const token = jwt.sign({
-                        email: data[0].email,
-                        username: data[0].username
-                    },'token-checker',{
-                        expiresIn: 200000
-                    });
-                    return res.status(200).send({
-                        message: 'Authentication Successful',
-                        Authorization : token,
-                        verified: true,
-                        user: data[0].username
-                    })
-                }
-                if(!result){
-                    console.log(result);
-                    return res.status(200).send({
-                        message: 'Password Wrong'
-                    })
-                }
-            })
-        }).catch( err => {
-            console.log(err);
-            return res.status(500).send({
-                message: err.message
-            })
-        });
-    } else if(!req.body.loginEmail || !req.body.loginPassword){
-        return res.status(400).send({
-            message: "Form cannot be left blank!"
-        })
-    }
 };

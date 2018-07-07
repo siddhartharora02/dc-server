@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Server for pro5",
+  "description": "Server for DC",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,26 +9,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://sid_arora@bitbucket.org/sid_arora/pro5_server.git"
+    "url": "git+https://sid_arora@bitbucket.org/sid_arora/DC_server.git"
   },
   "keywords": [
-    "PRO5"
+    "DC"
   ],
   "author": "Siddharth Arora",
   "license": "MIT",
-  "homepage": "https://bitbucket.org/sid_arora/pro5_server#readme",
+  "homepage": "https://bitbucket.org/sid_arora/DC_server#readme",
   "dependencies": {
     "assert": "^1.4.1",
-    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
     "config": "^1.30.0",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "helmet": "^3.12.1",
-    "jsonwebtoken": "^8.2.1",
     "mongoose": "^5.0.15",
     "mongoose-unique-validator": "^2.0.1",
+    "multer": "^1.3.1",
     "pm2": "^2.10.4",
     "validator": "^10.1.0"
   },

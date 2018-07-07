@@ -1,8 +1,10 @@
 const express = require ('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const multer = require('multer');
 //create an express app
 const app = express();
+
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended:false }));
 // parse requests of content-type - application/x-www-form-urlencoded
@@ -32,10 +34,26 @@ app.get('/', (req,res)=>{
     })
 });
 
+let storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        let mid = req.headers.referer.split("/");
+        let uploads = mid[mid.length-1];
+        cb(null, 'uploads1/photos/'+uploads);
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now()+file.originalname)
+    }
+});
+let upload = multer({
+    storage: storage
+});
+
+app.post('/photoUpload',upload.single('photoUpload'), (req,res)=>{
+    // console.log(req.body.folderId);
+    res.send("Done!");
+})
 
 require('./app/routes/users.routes.js')(app);
-require('./app/routes/uploads.routes.js')(app);
-
 
 const port = process.env.PORT || 3000;
 app.listen(port, ()=>{
