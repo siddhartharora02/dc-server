@@ -35,6 +35,7 @@ app.get('/', (req,res)=>{
 
 require('./app/routes/users.routes.js')(app);
 require('./app/routes/uploads.routes.js')(app);
+require('./app/routes/accounts.routes.js')(app);
 
 
 const port = process.env.PORT || 3000;
