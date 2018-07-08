@@ -15,6 +15,7 @@ const dbConfig = require('./config/database.config');
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
+app.use("/uploads", express.static(__dirname + '/uploads'));
 
 // connecting to the database
 mongoose.connect(dbConfig.url).then(()=>{
@@ -34,8 +35,6 @@ app.get('/', (req,res)=>{
 
 
 require('./app/routes/users.routes.js')(app);
-require('./app/routes/uploads.routes.js')(app);
-require('./app/routes/accounts.routes.js')(app);
 
 
 const port = process.env.PORT || 3000;

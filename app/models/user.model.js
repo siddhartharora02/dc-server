@@ -3,7 +3,10 @@ const {isEmail} = require('validator');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const UserSchema = mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        required: true,
+    },
     email:{
         type: String,
         unique: true,
@@ -13,8 +16,21 @@ const UserSchema = mongoose.Schema({
         validate: [isEmail, 'Invalid Email']
     },
     phone: String,
-    pan: String,
-    company: String
+    pan: {
+        type: String,
+        required: true,
+    },
+    company: String,
+    photoUpload: String,
+    panUpload: String,
+    aadharUpload: String,
+    passportUpload: String,
+    accounts:[{
+        accNumber: Number,
+        accName: String,
+        accIfsc: String,
+        accBank: String
+    }],
 },{
    timestamps: true
 });
