@@ -145,27 +145,36 @@ exports.findBankAccounts = (req, res) => {
 exports.findData = (req, res) => {
     User.find({_id:req.params.id}).then(data=>{
         let counter = 0;
+        let items=[];
         if(data[0].accounts.length > 0){
             counter++;
+            items.push('bank');
         }
         if(data[0].email && data[0].email != "" && data[0].email !=undefined && data[0].email != null  ){
             counter++;
+            items.push('account');
         }
         if(data[0].photoUpload && data[0].photoUpload != "" && data[0].photoUpload !=undefined && data[0].photoUpload != null  ){
             counter++;
+            items.push('photo');
         }
         if(data[0].panUpload && data[0].panUpload != "" && data[0].panUpload !=undefined && data[0].panUpload != null  ){
             counter++;
+            items.push('pan');
         }
         if(data[0].aadharUpload && data[0].aadharUpload != "" && data[0].aadharUpload !=undefined && data[0].aadharUpload != null  ){
             counter++;
+            items.push('aadhar');
         }
         if(data[0].passportUpload && data[0].passportUpload != "" && data[0].passportUpload !=undefined && data[0].passportUpload != null  ){
             counter++;
+            items.push('passport');
         }
         counter = Math.round(counter/6 *100) +'%';
+        console.log(items);
         res.send({
-            counter : counter
+            counter : counter,
+            items: items
         });
     });
 }
