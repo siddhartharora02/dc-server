@@ -48,7 +48,9 @@ exports.upload = (req,res)=>{
                     if (error) {
                         console.log("ERROR -" + error);
                     } else {
-                        console.log("S -" + success);
+                        res.send({
+                            uploaded: true
+                        })
                     }
                 }
 
@@ -62,7 +64,9 @@ exports.upload = (req,res)=>{
                     if (error) {
                         console.log("ERROR -" + error);
                     } else {
-                        console.log("S -" + success);
+                        res.send({
+                            uploaded: true
+                        })
                     }
                 }
             );
@@ -75,7 +79,9 @@ exports.upload = (req,res)=>{
                     if (error) {
                         console.log("ERROR -" + error);
                     } else {
-                        console.log("S -" + success);
+                        res.send({
+                            uploaded: true
+                        })
                     }
                 }
             );
@@ -89,7 +95,9 @@ exports.upload = (req,res)=>{
                     if (error) {
                         console.log("ERROR -" + error);
                     } else {
-                        console.log("S -" + success);
+                        res.send({
+                            uploaded: true
+                        })
                     }
                 }
             );
